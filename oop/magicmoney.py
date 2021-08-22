@@ -68,6 +68,81 @@ True
 
 # Write your code here:
 
+class Money:
+
+    def __init__(self, dollars: int = 0, cents: int = 0):
+        self.dollars: int = dollars
+        self.cents: int = cents
+
+    @property
+    def dollars(self) -> int:
+        return self._dollars
+
+    @property
+    def cents(self) -> int:
+        return self._cents
+
+    @dollars.setter
+    def dollars(self, in_dollars):
+        self._dollars = in_dollars
+
+    @cents.setter
+    def cents(self, in_cents):
+        (cent_dollars, cent_modu) = (in_cents // 100, in_cents % 100)
+        if (cent_dollars):
+            self.dollars += cent_dollars
+        self._cents = in_cents
+
+    def __add__(self, other):
+        tot_cents = self.cents + other.cents
+        (cent_over, cent_left) = (tot_cents // 100, tot_cents % 100)
+        dollars = cent_over + self.dollars + other.dollars
+
+        return Money(dollars, cent_left)
+
+    def __sub__(self, other):
+        tot_cents = self.cents - other.cents
+        (cent_over, cent_left) = (tot_cents // 100, tot_cents % 100)
+        dollars = cent_over + self.dollars - other.dollars
+
+        return Money(dollars, cent_left)
+
+    def __mul__(self, multiple: int):
+        tot_cents = self.cents * multiple
+        (cent_over, cent_left) = (tot_cents // 100, tot_cents % 100)
+        dollars = cent_over + (self.dollars * multiple)
+
+        return Money(dollars, cent_left)
+
+    def __lt__(self, other) -> bool:
+        if self.dollars < other.dollars:
+            if self.cents < other.cents:
+                return True
+        return False
+
+    def __le__(self, other) -> bool:
+        if self.dollars <= other.dollars:
+            if self.cents <= other.cents:
+                return True
+        return False
+
+    def __ge__(self, other) -> bool:
+        if self.dollars >= other.dollars:
+            if self.cents >= other.cents:
+                return True
+        return False
+
+    def __eq__(self, other) -> bool:
+        if self.dollars == other.dollars:
+            if self.cents == other.cents:
+                return True
+        return False
+
+    def __str__(self) -> str:
+        return "${}.{:02}".format(self.dollars, self.cents)
+
+    def __repr__(self) -> str:
+        return "Money({}, {})".format(self.dollars, self.cents)
 
 
 # Do not edit any code below this line!
